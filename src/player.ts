@@ -1,7 +1,7 @@
-import { UnstableRatingException } from './whr-base'
+import { UnstableRatingException } from './whr'
 import PlayerDay from './player-day'
 import Game from './game'
-import { Config } from './whr-base'
+import { Config } from './whr'
 
 
 export default class Player {
@@ -20,7 +20,7 @@ export default class Player {
     }
 
     get inspect(): string {
-        return JSON.stringify(this)
+        return `<Player:${Object.entries(this).map((arr: any[]) => `${arr[0]}=${arr[1]}`).join(',')}>`
     }
 
     get logLikelihood(): number {
@@ -114,7 +114,7 @@ export default class Player {
         if (this.debug) {
             console.log(`Updating ${this.inspect}`)
             this.days.forEach(day => {
-                console.log(`day[${day.day}] r = #{day.r}`)
+                console.log(`day[${day.day}] r = ${day.r}`)
                 console.log(`day[${day.day}] win terms = ${day.wonGameTerms}`)
                 console.log(`day[${day.day}] win games = ${day.wonGames}`)
                 console.log(`day[${day.day}] lose terms = ${day.lostGameTerms}`)
@@ -182,7 +182,7 @@ export default class Player {
     
       let sigma2 = this.computeSigma2()
       let h = this.hessian(this.days, sigma2)
-      // let g = this.gradient(r, this.days, sigma2)
+      //let g = this.gradient(r, this.days, sigma2)
     
       let n = this.days.length
     
@@ -191,15 +191,10 @@ export default class Player {
       let b = [h[0][1]]
     
       n = r.length
-      for(let i = 0; i < n; i++) {
-        // Reset values from default
-        a = []
-        d = []
-        b = []
-
-        a.push(h[i][i-1] / d[i-1])
-        d.push(h[i][i] - a[i] * b[i-1])
-        b.push(h[i][i+1])
+      for(let i = 1; i < n; i++) {
+        a[i] = h[i][i-1] / d[i-1]
+        d[i] = h[i][i] - a[i] * b[i-1]
+        b[i] = h[i][i+1]
       }
 
       let dp = []
@@ -234,17 +229,18 @@ export default class Player {
       if(this.days.length > 0) {
         let c = this.covariance
         let u = this.days.map((_e,i) => c[i][i])
-        return this.days.map((d, i) => [d, u[i]]).map(e => e[0].uncertainty = e[1])
+        let zipped =  this.days.map((d, i) => [d, u[i]]).map(e => e[0].uncertainty = e[1])
+        return zipped
       }
       else
         return 5
     }
 
-    addGame(game: Game) {
+    addGame(game: Game): void {
         let lastDay = this.days.slice(-1)[0]
         if(!lastDay || lastDay.day != game.day) {
             let newPday = new PlayerDay(this, game.day)
-            if(this.days.length === 0) {
+            if(this.days.length == 0) {
                 newPday.isFirstDay = true
                 newPday.gamma = 1
             } else {
@@ -253,13 +249,12 @@ export default class Player {
             lastDay = newPday
             this.days.push(newPday)
         }
-
         if (game.whitePlayer === this) {
             game.wpd = lastDay
         } else {
             game.bpd = lastDay
-            lastDay.addGame(game)
         }
+        lastDay.addGame(game)
     }
 
 }

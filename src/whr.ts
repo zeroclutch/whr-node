@@ -64,8 +64,8 @@ export default class WholeHistoryRating {
         if (black == white) {
             throw new RatingException("Invalid game, player cannot play with themself")
         }
-        let blackPlayer = this.playerByName(black)
         let whitePlayer = this.playerByName(white)
+        let blackPlayer = this.playerByName(black)
 
         return new Game(blackPlayer, whitePlayer, winner, timeStep, handicap, extras)
     }

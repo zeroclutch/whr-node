@@ -1,5 +1,5 @@
 import Player from './player'
-import { UnstableRatingException, RatingException } from './whr-base'
+import { UnstableRatingException, RatingException } from './whr'
 import PlayerDay from './player-day'
 
 export default class Game {
@@ -26,7 +26,7 @@ export default class Game {
     }
 
     get inspect(): string {
-        return JSON.stringify(this)
+      return `<Game:${Object.entries(this).map((arr: any[]) => `${arr[0]}=${arr[1]}`).join(',')}>`
     }
 
     get handicap(): number {
@@ -42,10 +42,10 @@ export default class Game {
       else if (player === this.blackPlayer)
         opponentElo = this.wpd!.elo - blackAdvantage
       else
-        throw new RatingException(`No opponent for ${player.inspect}, since they're not in this game: ${this.inspect}.`)
+        throw new RatingException(`No opponent for ${player.name}, since they're not in this game: ${this}.`)
       let rval = 10**(opponentElo/400.0)
       if (rval == 0 || !isFinite(rval) || isNaN(rval))
-        throw new UnstableRatingException(`Bad adjusted gamma: ${this.inspect}`)
+        throw new UnstableRatingException(`Bad adjusted gamma: ${this}`)
       return rval
     }
 
@@ -68,6 +68,6 @@ export default class Game {
     }
   
     get blackWinProbability() {
-        return this.wpd!.gamma/(this.wpd!.gamma + this.opponentsAdjustedGamma(this.whitePlayer))
+        return this.wpd!.gamma/(this.wpd!.gamma + this.opponentsAdjustedGamma(this.blackPlayer))
     }
 }

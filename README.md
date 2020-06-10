@@ -1,27 +1,57 @@
-# TSDX Bootstrap
+# Whole History Rating
 
-This project was bootstrapped with [TSDX](https://github.com/jaredpalmer/tsdx).
+A system for ranking game players by skill, based on Rémi Coulom's [Whole History Rating](http://remi.coulom.free.fr/WHR/WHR.pdf) algorithm, with modifications to support handicaps.
 
-## Local Development
+This is a port of [GoShrine's implementation](https://github.com/goshrine/whole_history_rating) in Typescript. 
 
-Below is a list of commands you will probably find useful.
+Installation
+------------
 
-### `npm start` or `yarn start`
+* npm install whole_history_rating
 
-Runs the project in development/watch mode. Your project will be rebuilt upon changes. TSDX has a special logger for you convenience. Error messages are pretty printed and formatted for compatibility VS Code's Problems tab.
 
-<img src="https://user-images.githubusercontent.com/4060187/52168303-574d3a00-26f6-11e9-9f3b-71dbec9ebfcb.gif" width="600" />
+Usage
+-----
+```js
+import WholeHistoryRating from 'whole_history_rating'
 
-Your library will be rebuilt if you make edits.
+const whr = new WholeHistoryRating()
 
-### `npm run build` or `yarn build`
+// WholeHistoryRating#createGame arguments: black player name, white player name, winner, day number, handicap
+// Handicap should generally be less than 500 elo
+whr.createGame("shusaku", "shusai", "B", 1, 0)
+whr.createGame("shusaku", "shusai", "W", 2, 0)
+whr.createGame("shusaku", "shusai", "W", 3, 0)
 
-Bundles the package to the `dist` folder.
-The package is optimized and bundled with Rollup into multiple formats (CommonJS, UMD, and ES Module).
+// Iterate the WHR algorithm towards convergence with more players/games, more iterations are needed.
+whr.iterate(50)
 
-<img src="https://user-images.githubusercontent.com/4060187/52168322-a98e5b00-26f6-11e9-8cf6-222d716b75ef.gif" width="600" />
+// Results are stored in one triplet for each day: [day_number, elo_rating, uncertainty]
+whr.ratings_for_player("shusaku")
+/*  Output:
+    [[1, -43, 84], 
+    [2, -45, 84], 
+    [3, -45, 84]]
+*/
 
-### `npm test` or `yarn test`
+whr.ratings_for_player("shusai")
+/*  Output:
+    [[1, -43, 84], 
+    [2, -45, 84], 
+    [3, -45, 84]]
+*/
+```
 
-Runs the test watcher (Jest) in an interactive mode.
-By default, runs tests related to files changed since the last commit.
+Optional Configuration
+----------------------
+
+One of the meta parameters to WHR is the variance of rating change over one time step, :w2,
+which determines how much that a player's rating is likely change in one day.  Higher numbers allow for faster progress.
+The default value is 300, which is fairly high.
+
+    @whr = WholeHistoryRating::Base.new(:w2 => 17)
+    
+
+
+
+

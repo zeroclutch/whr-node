@@ -1,6 +1,6 @@
 import Player from './player'
 import Game from './game';
-import { UnstableRatingException } from './whr-base';
+import { UnstableRatingException } from './whr';
 
 export default class PlayerDay {
     // attr_accessor :won_games, :lost_games, :name, :day, :player, :r, :is_first_day, :uncertainty
@@ -96,7 +96,7 @@ export default class PlayerDay {
     }
 
     get logLikelihoodDerivative(): number {
-        let tally = 0.0
+        let tally = 0
         let terms = this.wonGameTerms!.concat(this.lostGameTerms)
         terms.forEach((term: number[]) => {
             let c = term[2], d = term[3]
