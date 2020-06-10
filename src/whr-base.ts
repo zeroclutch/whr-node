@@ -1,6 +1,6 @@
-import Player from 'player'
-import Game from 'game'
-import PlayerDay from 'player-day'
+import Player from './player'
+import Game from './game'
+import PlayerDay from './player-day'
 
 export interface Config {
     debug?: boolean
@@ -16,15 +16,19 @@ export class UnstableRatingException extends RatingException {}
 /**
  * Base class for WHR.
  */
-export default class Base {
+export default class WholeHistoryRating {
     config: Config
     players: Map<string, Player>
     games: Game[]
     constructor(config?: Config) {
         this.config    = config          || {}
-        this.config.w2 = config?.w2      || 300.0
-        this.games     = config?.games   || []
-        this.players   = config?.players || new Map<string, Player>()
+        this.config.w2 = this.config.w2      || 300.0
+        this.games     = this.config.games   || []
+        this.players   = this.config.players || new Map<string, Player>()
+    }
+
+    get inspect() {
+        return this
     }
 
     printOrderedRatings() {
@@ -67,7 +71,7 @@ export default class Base {
     }
   
     createGame(black: string, white: string, winner: string, timeStep: number, handicap: number, extras: object = {}) {
-        let game = this.setupGame(black, white, winner, timeStep, handicap, extras)
+        const game: Game = this.setupGame(black, white, winner, timeStep, handicap, extras)
         this.addGame(game)
     }
 

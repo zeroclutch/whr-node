@@ -1,7 +1,7 @@
-import { UnstableRatingException } from 'base'
-import PlayerDay from 'player-day'
-import Game from 'game'
-import { Config } from 'base'
+import { UnstableRatingException } from './whr-base'
+import PlayerDay from './player-day'
+import Game from './game'
+import { Config } from './whr-base'
 
 
 export default class Player {
@@ -242,7 +242,7 @@ export default class Player {
 
     addGame(game: Game) {
         let lastDay = this.days.slice(-1)[0]
-        if(lastDay == null || lastDay.day !== game.day) {
+        if(!lastDay || lastDay.day != game.day) {
             let newPday = new PlayerDay(this, game.day)
             if(this.days.length === 0) {
                 newPday.isFirstDay = true
@@ -250,6 +250,7 @@ export default class Player {
             } else {
                 newPday.gamma = lastDay.gamma
             }
+            lastDay = newPday
             this.days.push(newPday)
         }
 

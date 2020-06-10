@@ -1,6 +1,6 @@
-import Player from 'player'
-import { UnstableRatingException, RatingException } from 'base'
-import PlayerDay from 'player-day'
+import Player from './player'
+import { UnstableRatingException, RatingException } from './whr-base'
+import PlayerDay from './player-day'
 
 export default class Game {
 

@@ -1,6 +1,6 @@
-import Player from 'player'
-import Game from 'game';
-import { UnstableRatingException } from 'base';
+import Player from './player'
+import Game from './game';
+import { UnstableRatingException } from './whr-base';
 
 export default class PlayerDay {
     // attr_accessor :won_games, :lost_games, :name, :day, :player, :r, :is_first_day, :uncertainty
