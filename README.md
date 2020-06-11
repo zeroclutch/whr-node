@@ -7,13 +7,14 @@ This is a port of [GoShrine's implementation](https://github.com/goshrine/whole_
 Installation
 ------------
 
-* npm install whole_history_rating
-
+```bash
+npm install whr
+```
 
 Usage
 -----
 ```js
-import WholeHistoryRating from 'whole_history_rating'
+const { WholeHistoryRating } = require('whr')
 
 const whr = new WholeHistoryRating()
 
@@ -27,18 +28,18 @@ whr.createGame("shusaku", "shusai", "W", 3, 0)
 whr.iterate(50)
 
 // Results are stored in one triplet for each day: [day_number, elo_rating, uncertainty]
-whr.ratings_for_player("shusaku")
+console.log(whr.ratingsForPlayer("shusaku"))
 /*  Output:
     [[1, -43, 84], 
     [2, -45, 84], 
     [3, -45, 84]]
 */
 
-whr.ratings_for_player("shusai")
+console.log(whr.ratingsForPlayer("shusai"))
 /*  Output:
-    [[1, -43, 84], 
-    [2, -45, 84], 
-    [3, -45, 84]]
+    [[1, 43, 84], 
+    [2, 45, 84], 
+    [3, 45, 84]]
 */
 ```
 
