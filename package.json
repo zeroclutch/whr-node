@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -41,5 +41,11 @@
   "repository": {
     "url": "https://github.com/zeroclutch/whr-node"
   },
-  "keywords": ["node", "rating", "elo", "typescript", "game"]
+  "keywords": [
+    "node",
+    "rating",
+    "elo",
+    "typescript",
+    "game"
+  ]
 }
