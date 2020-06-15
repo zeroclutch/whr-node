@@ -8,7 +8,7 @@ Installation
 ------------
 
 ```bash
-npm install whr
+npm i whr
 ```
 
 Usage

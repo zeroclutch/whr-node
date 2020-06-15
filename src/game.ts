@@ -68,6 +68,6 @@ export default class Game {
     }
   
     get blackWinProbability() {
-        return this.wpd!.gamma/(this.wpd!.gamma + this.opponentsAdjustedGamma(this.blackPlayer))
+        return this.bpd!.gamma/(this.bpd!.gamma + this.opponentsAdjustedGamma(this.blackPlayer))
     }
 }

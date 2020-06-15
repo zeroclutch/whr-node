@@ -72,7 +72,7 @@ export default class WholeHistoryRating {
   
     createGame(black: string, white: string, winner: string, timeStep: number, handicap: number, extras: object = {}) {
         const game: Game = this.setupGame(black, white, winner, timeStep, handicap, extras)
-        this.addGame(game)
+        return this.addGame(game)
     }
 
     addGame(game: Game) {
