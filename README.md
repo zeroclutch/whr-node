@@ -50,5 +50,5 @@ One of the meta parameters to WHR is the variance of rating change over one time
 which determines how much that a player's rating is likely change in one day.  Higher numbers allow for faster progress.
 The default value is 300, which is fairly high.
 ```js
-whr = new WholeHistoryRating.new({w2: 17})
+whr = new WholeHistoryRating({w2: 17})
 ```
